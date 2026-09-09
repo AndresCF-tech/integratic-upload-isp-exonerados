@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    invoker
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    // Google Cloud Functions dependencies
+    implementation 'com.google.cloud.functions:functions-framework-api:1.1.4'
+    implementation 'com.google.api-client:google-api-client:2.8.0'
+    implementation 'com.google.auth:google-auth-library-oauth2-http:1.37.0'
+
+    // Dependencies for formatting and parsing XML
+    // https://mvnrepository.com/artifact/jakarta.xml.ws/jakarta.xml.ws-api
+    implementation 'jakarta.xml.ws:jakarta.xml.ws-api:4.0.2'
+    runtimeOnly 'org.glassfish.jaxb:jaxb-runtime:4.0.5'
+    runtimeOnly 'com.sun.xml.messaging.saaj:saaj-impl:3.0.4'
+    invoker 'com.google.cloud.functions.invoker:java-function-invoker:1.4.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// Register a "runFunction" task to run the function locally
+tasks.register("runFunction", JavaExec) {
+    classpath(configurations.invoker)
+    inputs.files(configurations.runtimeClasspath, sourceSets.main.output)
+    args(
+            '--target', project.findProperty('run.functionTarget') ?: '',
+            '--port', project.findProperty('run.port') ?: 8080
+    )
+    doFirst {
+        args('--classpath', files(configurations.runtimeClasspath, sourceSets.main.output).asPath)
+    }
+}

@@ -1,0 +1,3 @@
+ALLOWED_ORIGINS: "http://localhost:8080,https://central-de-cuentas-qa-dot-mintic-models-dev.uc.r.appspot.com,https://swagger-integratic-dot-mintic-models-dev.uc.r.appspot.com"
+VALID_AUDIENCES: "32555940559.apps.googleusercontent.com,https://us-central1-mintic-models-prod.cloudfunctions.net/integratic_upload_file"
+SOAP_ENDPOINT: "https://integratic.mintic.gov.co/AZDigital/WebServices/SOAP/"
